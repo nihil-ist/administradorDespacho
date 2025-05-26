@@ -1,0 +1,65 @@
+<div class="main-container">
+  
+    <div class="navbar-container">
+      <app-navbar></app-navbar>
+    </div>
+    
+    <div class="herramientas-container">
+      
+        <main class="herramientas-main">
+            <div class="container-add">
+                <h2 class="mb-3 text-center">Agregar Nuevo Usuario</h2>
+                <form (ngSubmit)="addUser()">
+
+                  <div class="d-flex">
+                    <div class="form-floating mb-3">
+                      <input  type="text" class="form-control gradient-input-left" id="name" [(ngModel)]="user.nombre" name="name" placeholder="name" required />
+                      <label for="name" class="form-label">Nombre</label>
+                  </div>
+                    
+                    <div class="form-floating mb-3 ms-3">
+                      <input type="text" class="form-control gradient-input-right" id="username" [(ngModel)]="user.usuario" name="username" placeholder="username" required />
+                      <label for="username" class="form-label">Usuario</label>
+                    </div>
+                  </div>
+                  
+                  <div class="form-floating mb-3">
+                    <input type="email" class="form-control gradient-input" id="email" [(ngModel)]="user.correo" name="email" placeholder="email" required />
+                    <label for="email" class="form-label">Email</label>
+                </div>
+                  <div class="mb-3">
+                    <select class="form-control gradient-input py-3" id="level" [(ngModel)]="user.tipo" name="level" required>
+                        <option value="" disabled selected>Selecciona un nivel</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="abogado">Abogado</option>
+                    </select>
+                    <!-- <label for="level" class="form-label">Nivel</label> -->
+                  </div>
+                  <div class="d-flex">
+                    <div class="form-floating mb-3">
+                      <input type="password" class="form-control gradient-input-left" id="password" [(ngModel)]="user.contrasena" name="password" placeholder="password" required />
+                      <label for="password" class="form-label">Contraseña</label>
+                    </div>
+                    <div class="form-floating mb-3 ms-3">
+                      <input type="password" class="form-control gradient-input-right" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="confirmpassword" required />
+                      <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                    </div>  
+                  </div>
+                  
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                  </div>
+                </form>
+              </div>
+        </main>
+      
+        <footer class="herramientas-footer">
+          <p>&copy; 2025 LOF</p>
+          <a href="/home">Inicio</a> | 
+          <a href="/configuracion">Configuración</a> | 
+          <a href="/soporte">Soporte</a> | 
+          <a href="/contacto">Contacto</a>
+        </footer>
+      </div>
+      
+</div>

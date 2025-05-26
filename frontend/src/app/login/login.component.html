@@ -1,0 +1,80 @@
+<div class="container1">
+    <div class="navbar1">
+        <app-navbar></app-navbar>
+
+    </div>
+
+    <div class="nose">
+        <div class="container2">
+            <div class="screen">
+                <div class="screen__content">
+                    <img draggable="false" class="img_logo" src="assets/logo.png" alt="logo">
+                    <form class="login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <div class="login__field">
+                            <i class="login__icon fas fa-user"></i>
+                            <input
+                                type="email"
+                                class="login__input"
+                                formControlName="user"
+                                placeholder="Usuario"
+                            />
+                            <!-- <div
+                                *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                                class="error"
+                            >
+                                Please enter a valid email.
+                            </div> -->
+                        </div>
+                        <div class="login__field">
+                            <i class="login__icon fas fa-lock"></i>
+                            <input
+                                type="password"
+                                class="login__input"
+                                formControlName="pass"
+                                placeholder="Contraseña"
+                            />
+                            <!-- <div
+                                *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                class="error"
+                            >
+                                Password must be at least 6 characters long.
+                            </div> -->
+                        </div>
+                        <button
+                            class="button login__submit"
+                            type="submit"
+                            [disabled]="loginForm.invalid"
+                        >
+                            <span class="button__text">Iniciar sesión</span>
+                            <!-- <i class="button__icon fas fa-chevron-right"></i> -->
+                        </button>
+                    </form>
+                    <!-- <div class="social-login">
+                        <h3>Log in via</h3>
+                        <div class="social-icons">
+                            <a href="#" class="social-login__icon fab fa-instagram"></a>
+                            <a href="#" class="social-login__icon fab fa-facebook"></a>
+                            <a href="#" class="social-login__icon fab fa-twitter"></a>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="screen__background">
+                    <span class="screen__background__shape screen__background__shape4"></span>
+                    <span class="screen__background__shape screen__background__shape3"></span>
+                    <span class="screen__background__shape screen__background__shape2"></span>
+                    <span class="screen__background__shape screen__background__shape1"></span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <footer class="home-footer">
+        <p>&copy; 2025 LOF</p>
+        <a href="/home">Inicio</a> | 
+        <a href="/configuracion">Configuración</a> | 
+        <a href="/soporte">Soporte</a> | 
+        <a href="/contacto">Contacto</a>
+    </footer>
+</div>
+
+

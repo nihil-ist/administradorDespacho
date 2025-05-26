@@ -1,0 +1,52 @@
+<div class="main-container">
+  
+    <div class="navbar-container">
+      <app-navbar></app-navbar>
+    </div>
+    
+    <div class="herramientas-container">
+      
+        <main class="herramientas-main">
+          
+            <div class="mt-4">
+                <div class="header">
+                    <h2>Usuarios</h2>
+                    <button class="btn btn-primary mb-3" (click)="navigateTo('herramientas/usuarios/nuevo')"><i class="fa-solid fa-user-plus"></i><span class="hide-on-small ms-2">Agregar Usuario</span></button>
+                </div>
+                <table class="styled-table">
+                  <thead>
+                    <tr>
+                      <th class="hide-on-small">Nombre</th>
+                      <th class="hide-on-medium">Email</th>
+                      <th>Usuario</th>
+                      <th>Nivel</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of users">
+                      <td class="hide-on-small">{{ user.nombre }}</td>
+                      <td class="hide-on-medium">{{ user.correo }}</td>
+                      <td>{{ user.usuario }}</td>
+                      <td>{{ user.tipo }}</td>
+                      <td>
+                        <button class="btn btn-primary btn-sm" (click)="deleteUser(user)">Eliminar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+
+        </main>
+      
+        <footer class="herramientas-footer">
+          <p>&copy; 2025 LOF</p>
+          <a href="/home">Inicio</a> | 
+          <a href="/configuracion">Configuración</a> | 
+          <a href="/soporte">Soporte</a> | 
+          <a href="/contacto">Contacto</a>
+        </footer>
+      </div>
+      
+</div>

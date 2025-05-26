@@ -1,0 +1,48 @@
+<div class="main-container">
+  
+    <div class="navbar-container">
+      <app-navbar></app-navbar>
+    </div>
+    
+    <div class="exp-container">
+        <!-- <header class="exp-header">
+          <img src="assets/logo.png" alt="lof" class="logo">
+          <h1>LOF Corporativo</h1>
+        </header> -->
+      
+        <main class="exp-main">
+          <div class="menu-grid">
+            <div class="menu-item" (click)="navigateTo('nuevoExpediente')">
+                <i class="fa-solid fa-file-circle-plus"></i>
+                <p>Nuevo Expediente</p>
+            </div>
+            <div class="menu-item" (click)="navigateTo('exhortos')">
+                <i class="fa-solid fa-file"></i>
+              <p>Exhortos</p>
+            </div>
+            <div class="menu-item" (click)="navigateTo('enProceso')">
+                <i class="fa-solid fa-file"></i>
+              <p>En Proceso</p>
+            </div>
+            <div class="menu-item" (click)="navigateTo('terminados')">
+                <i class="fa-solid fa-file"></i>
+                <p>Terminados</p>
+            </div>
+            <div class="menu-item" (click)="navigateTo('todos')">
+                <i class="fa-solid fa-file"></i>
+                <p>Todos</p>
+            </div>
+          </div>
+        </main>
+      
+        
+      </div>
+      <footer class="exp-footer">
+        <p>&copy; 2025 LOF</p>
+        <a href="/home">Inicio</a> | 
+        <a href="/configuracion">Configuración</a> | 
+        <a href="/soporte">Soporte</a> | 
+        <a href="/contacto">Contacto</a>
+      </footer>
+    </div>
+    

@@ -1,0 +1,43 @@
+<div class="main-container">
+  
+<div class="navbar-container">
+  <app-navbar></app-navbar>
+</div>
+
+<div class="home-container">
+    <!-- <header class="home-header">
+      <img src="assets/logo.png" alt="lof" class="logo">
+      <h1>LOF Corporativo</h1>
+    </header> -->
+  
+    <main class="home-main">
+      <div class="menu-grid">
+        <div class="menu-item" (click)="navigateTo('expedientes')">
+          <i class="fa fa-folder"></i>
+          <p>Expedientes</p>
+        </div>
+        <div class="menu-item" (click)="navigateTo('directorio')">
+          <i class="fa fa-address-book"></i>
+          <p>Directorio</p>
+        </div>
+        <div class="menu-item" (click)="navigateTo('agenda')">
+          <i class="fa fa-calendar"></i>
+          <p>Agenda</p>
+        </div>
+        <div class="menu-item" (click)="navigateTo('herramientas')">
+          <i class="fa fa-tools"></i>
+          <p>Herramientas</p>
+        </div>
+      </div>
+    </main>
+  
+  </div>
+  <footer class="home-footer">
+    <p>&copy; 2025 LOF</p>
+    <a href="/home">Inicio</a> | 
+    <a href="/configuracion">Configuración</a> | 
+    <a href="/soporte">Soporte</a> | 
+    <a href="/contacto">Contacto</a>
+  </footer>
+  
+</div>

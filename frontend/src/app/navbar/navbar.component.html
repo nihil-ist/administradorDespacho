@@ -1,0 +1,38 @@
+<div class="navbar2">
+    <div class="logo">
+      <a routerLink="home">
+        <img src="assets/logo.png" alt="nose" height="40">
+      </a>
+    </div>
+    <ul class="links">
+      <li><a routerLink="/home" routerLinkActive="active">Inicio</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">Configuracion</a></li>
+      <li><a routerLink="/help" routerLinkActive="active">Soporte</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active">Contacto</a></li>
+    </ul>
+    <!-- <ng-container *ngIf="!isAuthenticated; else loggedIn">
+      <a routerLink="/login" class="action_btn" routerLinkActive="active">join now</a>
+    </ng-container> -->
+    <!-- <ng-template #loggedIn>
+      <a class="rolePage" (click)="goToRolePage()">{{ role }}: {{ name }}</a>
+      <a class="action_btn" (click)="logout()">logout</a>
+    </ng-template> -->
+    <div class="toggle_btn" (click)="toggleMenu()">
+      <i [ngClass]="menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+    </div>
+  </div>
+  
+  <div class="dropdown_menu" [ngClass]="{'open': menuOpen}">
+    <li><a routerLink="/home" routerLinkActive="active">home</a></li>
+    <li><a routerLink="/about" routerLinkActive="active">about</a></li>
+    <li><a routerLink="/help" routerLinkActive="active">help</a></li>
+    <li><a routerLink="/contact" routerLinkActive="active">contact</a></li>
+    <!-- <ng-container *ngIf="!isAuthenticated; else loggedIn">
+      <a routerLink="/login" class="action_btn" routerLinkActive="active">join now</a>
+    </ng-container> -->
+    <!-- <ng-template #loggedIn>
+      <a class="rolePage" (click)="goToRolePage()">{{ role }}: <b>{{ name }}</b></a>
+      <a class="action_btn" (click)="logout()">logout</a>
+    </ng-template> -->
+  </div>
+  

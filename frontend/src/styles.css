@@ -1,0 +1,14 @@
+/* @import "bootswatch/dist/sketchy/bootstrap.min.css"; */
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+* {
+    font-family: "Roboto", serif;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: rgb(229, 248, 225, 1) !important;
+}
+
+.fc {
+    width: 1000px;
+}

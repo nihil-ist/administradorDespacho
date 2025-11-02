@@ -1,0 +1,56 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Start server in background
+      env:
+        MONGO_URI: mongodb://localhost:27017/testDespacho
+      run: |
+        # Sobreescribe temporalmente la URI en conection.js para usar Mongo local (sin auth)
+        sed -i "s|const MONGO_URI = .*|const MONGO_URI = process.env.MONGO_URI || \`mongodb+srv://${DB_USER}:${DB_PASSWORD}@despachotest.a3dt5.mongodb.net/${DB_NAME}?retryWrites=true&w=majority\`;|" db/conection.js
+        npm start &  # Asume que tienes "start": "node index.js" en package.json
+        sleep 10  # Espera a que el servidor arranque
+
+    - name: Test server is running
+      run: |
+        # Chequea si el puerto está escuchando
+        if ! curl --fail --silent http://localhost:3000/; then
+          echo "Error: El servidor no respondió en /"
+          exit 1
+        fi
+        echo "Servidor responde OK"
+
+    # Opcional: Si agregas tests, descomenta esto y ajusta
+    # - name: Run tests
+    #   run: npm test

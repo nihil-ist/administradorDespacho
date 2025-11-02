@@ -1,0 +1,62 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend  # Asume que el backend está en esta carpeta; cambia si es diferente
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Start server in background
+      env:
+        MONGO_URI: mongodb://localhost:27017/testDespacho  # Usa el Mongo local sin auth
+        PORT: 3000  # Opcional, si quieres override
+      run: |
+        npm start &  # Asume "start": "node index.js" en package.json
+        sleep 15  # Espera un poco más para que arranque y conecte a Mongo
+
+    - name: Test server is running
+      run: |
+        if ! curl --fail --silent --output /dev/null http://localhost:3000/; then
+          echo "Error: El servidor no respondió en /"
+          exit 1
+        fi
+        echo "Servidor responde OK"
+
+    # Opcional: Agrega esto si tienes linting (ej. "lint": "eslint .")
+    # - name: Run lint
+    #   run: npm run lint
+
+    # Opcional: Si agregas tests (ej. Jest), descomenta
+    # - name: Run tests
+    #   run: npm test

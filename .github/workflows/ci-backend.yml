@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: backend  # Asume que el backend está en esta carpeta; cambia si es diferente
+
     services:
       mongodb:
         image: mongo:latest
@@ -35,22 +39,24 @@ jobs:
 
     - name: Start server in background
       env:
-        MONGO_URI: mongodb://localhost:27017/testDespacho
+        MONGO_URI: mongodb://localhost:27017/testDespacho  # Usa el Mongo local sin auth
+        PORT: 3000  # Opcional, si quieres override
       run: |
-        # Sobreescribe temporalmente la URI en conection.js para usar Mongo local (sin auth)
-        sed -i "s|const MONGO_URI = .*|const MONGO_URI = process.env.MONGO_URI || \`mongodb+srv://${DB_USER}:${DB_PASSWORD}@despachotest.a3dt5.mongodb.net/${DB_NAME}?retryWrites=true&w=majority\`;|" db/conection.js
-        npm start &  # Asume que tienes "start": "node index.js" en package.json
-        sleep 10  # Espera a que el servidor arranque
+        npm start &  # Asume "start": "node index.js" en package.json
+        sleep 15  # Espera un poco más para que arranque y conecte a Mongo
 
     - name: Test server is running
       run: |
-        # Chequea si el puerto está escuchando
-        if ! curl --fail --silent http://localhost:3000/; then
+        if ! curl --fail --silent --output /dev/null http://localhost:3000/; then
           echo "Error: El servidor no respondió en /"
           exit 1
         fi
         echo "Servidor responde OK"
 
-    # Opcional: Si agregas tests, descomenta esto y ajusta
+    # Opcional: Agrega esto si tienes linting (ej. "lint": "eslint .")
+    # - name: Run lint
+    #   run: npm run lint
+
+    # Opcional: Si agregas tests (ej. Jest), descomenta
     # - name: Run tests
     #   run: npm test

@@ -1,17 +1,17 @@
-name: Frontend CI
+name: Frontend CI2
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'src/**'
-      - 'package.json'
-      - 'angular.json'
+      - 'frontend/src/**'
+      - 'frontend/package.json'
+      - 'frontend/angular.json'
   pull_request:
     paths:
-      - 'src/**'
-      - 'package.json'
-      - 'angular.json'
+      - 'frontend/src/**'
+      - 'frontend/package.json'
+      - 'frontend/angular.json'
 
 jobs:
   build:
@@ -19,6 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +32,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: frontend/package.json
 
       - name: Install dependencies
         run: npm ci

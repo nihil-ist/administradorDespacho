@@ -24,6 +24,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, projectDespacho');
+    // AppComponent now uses RouterOutlet as its template. Ensure the outlet is present.
+    expect(compiled.querySelector('router-outlet')).not.toBeNull();
   });
 });

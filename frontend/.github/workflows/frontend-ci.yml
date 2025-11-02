@@ -40,5 +40,7 @@ jobs:
         run: |
           node -e "const pkg=require('./package.json'); const miss=[]; if(!pkg.dependencies||!pkg.dependencies.bootstrap) miss.push('bootstrap'); if(!pkg.dependencies||(!pkg.dependencies['@fullcalendar/core'] && !pkg.dependencies['@fullcalendar/angular'])) miss.push('@fullcalendar/*'); if(miss.length){console.error('Missing deps:',miss.join(',')); process.exit(1);} console.log('Dependencies OK: bootstrap and fullcalendar present');"
 
-      - name: Run unit tests
-        run: npm test -- --watch=false || (echo 'Tests failed or not configured' && exit 1)
+      - name: Run unit tests (headless)
+        run: |
+          # Run Karma in headless mode so it works on CI (no X server)
+          npm test -- --watch=false --browsers=ChromeHeadless || (echo 'Tests failed or not configured' && exit 1)

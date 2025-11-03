@@ -1,23 +1,32 @@
 const express = require('express');
+const cors = require('cors');
 
-const mongoose = require('./db/conection');  // Importa la conexión
+require('./db/conection');
 
 const app = express();
-const cors = require('cors');
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-const login = require('./routes/login');
-const abc = require('./routes/abc');
-app.use('/', login); 
-app.use('/', abc);  
+const authRoutes = require('./routes/login');
+const userRoutes = require('./routes/users');
+const expedientesRoutes = require('./routes/expedientes');
 
-app.get('/', (req, res) => {
-    console.log('Bienvenido')
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/expedientes', expedientesRoutes);
+
+app.get('/', (_req, res) => {
+    res.status(200).json({ message: 'API Administrador Despacho operativo' });
 });
 
-const PORT = 3000;
-app.listen(PORT,'0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+app.get('/health', (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
 });

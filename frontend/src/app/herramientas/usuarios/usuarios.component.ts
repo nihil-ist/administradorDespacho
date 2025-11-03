@@ -12,7 +12,7 @@ import { AuthService } from '../../../services/auth.service';
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
 })
-export class UsuariosComponent {
+export class UsuariosComponent implements OnInit {
   users: any[] = [];
 
   constructor(private router: Router, private authService: AuthService) {}
@@ -51,6 +51,15 @@ export class UsuariosComponent {
 
   navigateTo(route: string): void {
     this.router.navigate([`/${route}`]);
+  }
+
+  roleLabel(role: string): string {
+    if (!role) {
+      return 'Sin rol';
+    }
+
+    const normalized = role.toString().toLowerCase();
+    return normalized.charAt(0).toUpperCase() + normalized.slice(1);
   }
 
 }

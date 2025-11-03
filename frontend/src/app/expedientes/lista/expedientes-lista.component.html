@@ -1,0 +1,115 @@
+<div class="main-container">
+  <div class="navbar-container">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="lista-container">
+    <main class="lista-main">
+      <header class="page-header">
+        <div>
+          <h1>Listado de expedientes</h1>
+          <p>
+            {{ etiquetasEstados[filtroEstado()] }} · {{ totalRegistros() }} registro{{ totalRegistros() === 1 ? '' : 's' }}
+          </p>
+        </div>
+        <button class="primary" type="button" [routerLink]="['/nuevoExpediente']">
+          <i class="fa-solid fa-file-circle-plus"></i>
+          Nuevo expediente
+        </button>
+      </header>
+
+      <section class="filters">
+        <div class="search-box">
+          <i class="fa-solid fa-search"></i>
+          <input type="search" [formControl]="searchControl" placeholder="Buscar por número, cliente o abogado" />
+          <button type="button" class="clear" *ngIf="searchControl.value" (click)="limpiarBusqueda()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+
+        <div class="chips">
+          <button
+            type="button"
+            class="chip"
+            *ngFor="let estado of estados"
+            [class.active]="filtroEstado() === estado"
+            (click)="cambiarEstado(estado)"
+          >
+            {{ etiquetasEstados[estado] }}
+          </button>
+        </div>
+      </section>
+
+      <section class="tabla">
+        <div class="feedback" *ngIf="isLoading()">
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+          <span>Cargando expedientes...</span>
+        </div>
+
+        <div class="feedback error" *ngIf="error() && !isLoading()">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>{{ error() }}</span>
+        </div>
+
+        <table *ngIf="!isLoading() && !error() && expedientes().length > 0">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Título</th>
+              <th>Cliente</th>
+              <th>Abogado</th>
+              <th>Estatus</th>
+              <th>Apertura</th>
+              <th>Documentos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let expediente of expedientes(); trackBy: trackByExpedienteId">
+              <td>
+                <div class="numero">{{ expediente.numeroControl }}</div>
+                <small class="id">{{ expediente._id }}</small>
+              </td>
+              <td>
+                <div class="titulo">{{ expediente.titulo }}</div>
+                <small class="tipo">{{ expediente.tipo }}</small>
+              </td>
+              <td>{{ expediente.cliente }}</td>
+              <td>{{ expediente.abogadoAsignado }}</td>
+              <td>
+                <span class="badge" [class]="colorBadge(expediente.estatus)">{{ etiquetaEstado(expediente.estatus) }}</span>
+              </td>
+              <td>{{ expediente.fechaApertura | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <ng-container *ngIf="expediente.archivos.length > 0; else sinArchivos">
+                  <a
+                    class="files"
+                    *ngFor="let archivo of expediente.archivos; let i = index"
+                    [href]="archivo.url"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ i + 1 }}. {{ archivo.nombreOriginal }}
+                  </a>
+                </ng-container>
+                <ng-template #sinArchivos>
+                  <span class="no-files">Sin adjuntos</span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="feedback empty" *ngIf="!isLoading() && !error() && expedientes().length === 0">
+          <i class="fa-solid fa-folder-open"></i>
+          <span>No hay expedientes para este filtro.</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lista-footer">
+      <p>&copy; 2025 LOF</p>
+      <a routerLink="/home">Inicio</a> ·
+      <a routerLink="/expedientes">Panel expedientes</a>
+    </footer>
+  </div>
+</div>

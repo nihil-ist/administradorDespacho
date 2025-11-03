@@ -28,10 +28,12 @@
                     <label for="email" class="form-label">Email</label>
                 </div>
                   <div class="mb-3">
-                    <select class="form-control gradient-input py-3" id="level" [(ngModel)]="user.tipo" name="level" required>
-                        <option value="" disabled selected>Selecciona un nivel</option>
-                        <option value="administrador">Administrador</option>
-                        <option value="abogado">Abogado</option>
+          <select class="form-control gradient-input py-3" id="level" [(ngModel)]="user.tipo" name="level" required>
+            <option value="" disabled selected>Selecciona un nivel</option>
+            <option value="ADMINISTRADOR">Administrador</option>
+            <option value="ABOGADO">Abogado</option>
+            <option value="PRACTICANTE">Practicante</option>
+            <option value="BECARIO">Becario</option>
                     </select>
                     <!-- <label for="level" class="form-label">Nivel</label> -->
                   </div>

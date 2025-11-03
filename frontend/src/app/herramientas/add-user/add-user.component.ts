@@ -29,10 +29,15 @@ export class AddUserComponent {
       alert('Las contraseñas no coinciden');
       return;
     }
-    this.authService.addUser(this.user).subscribe(
+    const payload = {
+      ...this.user,
+      tipo: this.user.tipo ? this.user.tipo.toUpperCase() : this.user.tipo,
+    };
+
+    this.authService.addUser(payload).subscribe(
       (response) => {
         alert(response.message); // Mostrar el mensaje del backend
-        this.router.navigate(['/usuarios']); // Redirigir a la lista de usuarios
+        this.router.navigate(['/herramientas/usuarios']);
       },
       (error) => {
         console.error('Error al agregar el usuario:', error);

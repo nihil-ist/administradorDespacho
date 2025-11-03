@@ -7,7 +7,170 @@
     <div class="nExp-container">
       
         <main class="nExp-main">
-          
+          <section class="form-wrapper">
+            <header class="form-header">
+              <h1>Crear nuevo expediente</h1>
+              <p>Completa la información del expediente y adjunta los documentos necesarios.</p>
+            </header>
+
+            <form [formGroup]="expedienteForm" (ngSubmit)="submit()" novalidate>
+              <div class="grid">
+                <div class="field">
+                  <label for="titulo">Título *</label>
+                  <input
+                    id="titulo"
+                    type="text"
+                    formControlName="titulo"
+                    [class.invalid]="formControls['titulo'].invalid && (formControls['titulo'].dirty || formControls['titulo'].touched)"
+                    placeholder="Ej. Juicio agrario contra..."
+                  />
+                  <small class="error" *ngIf="formControls['titulo'].invalid && (formControls['titulo'].dirty || formControls['titulo'].touched)">
+                    Ingresa un título descriptivo.
+                  </small>
+                </div>
+
+                <div class="field">
+                  <label for="numeroControl">Número de control *</label>
+                  <input
+                    id="numeroControl"
+                    type="text"
+                    formControlName="numeroControl"
+                    [class.invalid]="formControls['numeroControl'].invalid && (formControls['numeroControl'].dirty || formControls['numeroControl'].touched)"
+                    placeholder="EXP-2025-001"
+                  />
+                  <small class="error" *ngIf="formControls['numeroControl'].invalid && (formControls['numeroControl'].dirty || formControls['numeroControl'].touched)">
+                    Define un número de control único.
+                  </small>
+                </div>
+
+                <div class="field">
+                  <label for="cliente">Cliente *</label>
+                  <input
+                    id="cliente"
+                    type="text"
+                    formControlName="cliente"
+                    [class.invalid]="formControls['cliente'].invalid && (formControls['cliente'].dirty || formControls['cliente'].touched)"
+                    placeholder="Nombre del cliente"
+                  />
+                  <small class="error" *ngIf="formControls['cliente'].invalid && (formControls['cliente'].dirty || formControls['cliente'].touched)">
+                    Indica el cliente asociado.
+                  </small>
+                </div>
+
+                <div class="field">
+                  <label for="abogadoAsignado">Abogado asignado *</label>
+                  <input
+                    id="abogadoAsignado"
+                    type="text"
+                    formControlName="abogadoAsignado"
+                    [class.invalid]="formControls['abogadoAsignado'].invalid && (formControls['abogadoAsignado'].dirty || formControls['abogadoAsignado'].touched)"
+                    placeholder="Nombre del responsable"
+                  />
+                  <small class="error" *ngIf="formControls['abogadoAsignado'].invalid && (formControls['abogadoAsignado'].dirty || formControls['abogadoAsignado'].touched)">
+                    Asigna un responsable.
+                  </small>
+                </div>
+
+                <div class="field">
+                  <label for="tipo">Tipo de asunto *</label>
+                  <input
+                    id="tipo"
+                    type="text"
+                    formControlName="tipo"
+                    [class.invalid]="formControls['tipo'].invalid && (formControls['tipo'].dirty || formControls['tipo'].touched)"
+                    placeholder="Ej. Agrario, Civil, Mercantil"
+                  />
+                  <small class="error" *ngIf="formControls['tipo'].invalid && (formControls['tipo'].dirty || formControls['tipo'].touched)">
+                    Describe el tipo de asunto.
+                  </small>
+                </div>
+
+                <div class="field">
+                  <label for="estatus">Estatus *</label>
+                  <select id="estatus" formControlName="estatus">
+                    <option *ngFor="let estado of estadoOpciones" [value]="estado.value">{{ estado.label }}</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="fechaApertura">Fecha de apertura *</label>
+                  <input id="fechaApertura" type="date" formControlName="fechaApertura" />
+                </div>
+
+                <div class="field">
+                  <label for="fechaAudiencia">Próxima audiencia</label>
+                  <input id="fechaAudiencia" type="date" formControlName="fechaAudiencia" />
+                </div>
+
+                <div class="field">
+                  <label for="fechaConclusion">Fecha de conclusión</label>
+                  <input id="fechaConclusion" type="date" formControlName="fechaConclusion" />
+                </div>
+
+                <div class="field full-width">
+                  <label for="descripcion">Descripción</label>
+                  <textarea id="descripcion" rows="3" formControlName="descripcion" placeholder="Resumen del expediente"></textarea>
+                </div>
+
+                <div class="field full-width">
+                  <label for="notasInternas">Notas internas</label>
+                  <textarea id="notasInternas" rows="3" formControlName="notasInternas" placeholder="Comentarios internos del despacho"></textarea>
+                </div>
+
+                <div class="field full-width">
+                  <label for="etiquetas">Etiquetas</label>
+                  <input
+                    id="etiquetas"
+                    type="text"
+                    formControlName="etiquetas"
+                    placeholder="Separadas por coma. Ej. cliente prioritario, agrario"
+                  />
+                </div>
+              </div>
+
+              <section class="upload-section">
+                <label for="files">Adjuntar archivos</label>
+                <input
+                  id="files"
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  multiple
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
+                />
+                <p class="helper-text">Puedes cargar múltiples archivos (PDF, Word, Excel, imágenes).</p>
+
+                <ul class="file-list" *ngIf="selectedFiles.length > 0">
+                  <li *ngFor="let file of selectedFiles; index as i">
+                    <span>{{ file.name }}</span>
+                    <button type="button" (click)="removeFile(i)">Quitar</button>
+                  </li>
+                </ul>
+
+                <div class="uploads" *ngIf="uploadResults().length > 0">
+                  <p>Archivos cargados en Firebase:</p>
+                  <ul>
+                    <li *ngFor="let file of uploadResults()">
+                      <a [href]="file.url" target="_blank" rel="noopener">{{ file.nombreOriginal }}</a>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+
+              <div class="feedback" *ngIf="submitError() || submitSuccess()">
+                <p class="error" *ngIf="submitError()">{{ submitError() }}</p>
+                <p class="success" *ngIf="submitSuccess()">{{ submitSuccess() }}</p>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" [disabled]="isSubmitting()" class="primary">
+                  {{ isSubmitting() ? 'Guardando...' : 'Guardar expediente' }}
+                </button>
+                <button type="button" class="secondary" [disabled]="isSubmitting()" (click)="cancel()">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </section>
         </main>
       
         <footer class="nExp-footer">

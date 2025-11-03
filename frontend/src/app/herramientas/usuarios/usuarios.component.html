@@ -28,7 +28,7 @@
                       <td class="hide-on-small">{{ user.nombre }}</td>
                       <td class="hide-on-medium">{{ user.correo }}</td>
                       <td>{{ user.usuario }}</td>
-                      <td>{{ user.tipo }}</td>
+                      <td>{{ roleLabel(user.tipo) }}</td>
                       <td>
                         <button class="btn btn-primary btn-sm" (click)="deleteUser(user)">Eliminar</button>
                       </td>

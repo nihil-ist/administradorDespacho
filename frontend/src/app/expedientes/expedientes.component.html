@@ -5,34 +5,63 @@
     </div>
     
     <div class="exp-container">
-        <!-- <header class="exp-header">
-          <img src="assets/logo.png" alt="lof" class="logo">
-          <h1>LOF Corporativo</h1>
-        </header> -->
-      
         <main class="exp-main">
-          <div class="menu-grid">
-            <div class="menu-item" (click)="navigateTo('nuevoExpediente')">
-                <i class="fa-solid fa-file-circle-plus"></i>
-                <p>Nuevo Expediente</p>
+          <section class="hero">
+            <div>
+              <h1>Expedientes del despacho</h1>
+              <p>Controla los asuntos por estado, crea nuevos expedientes y consulta su documentación centralizada.</p>
             </div>
-            <div class="menu-item" (click)="navigateTo('exhortos')">
-                <i class="fa-solid fa-file"></i>
-              <p>Exhortos</p>
-            </div>
-            <div class="menu-item" (click)="navigateTo('enProceso')">
-                <i class="fa-solid fa-file"></i>
-              <p>En Proceso</p>
-            </div>
-            <div class="menu-item" (click)="navigateTo('terminados')">
-                <i class="fa-solid fa-file"></i>
-                <p>Terminados</p>
-            </div>
-            <div class="menu-item" (click)="navigateTo('todos')">
-                <i class="fa-solid fa-file"></i>
-                <p>Todos</p>
-            </div>
-          </div>
+            <button class="primary" (click)="navigateTo('nuevoExpediente')">
+              <i class="fa-solid fa-file-circle-plus"></i>
+              <span>Nuevo expediente</span>
+            </button>
+          </section>
+
+          <section class="stats" *ngIf="stats(); else statsFallback">
+            <article class="stat-card total">
+              <p>Total de expedientes</p>
+              <h2>{{ stats()?.total || 0 }}</h2>
+            </article>
+            <article
+              class="stat-card"
+              *ngFor="let card of statusCards"
+              (click)="navigateTo(card.status)"
+            >
+              <div class="icon">
+                <i class="fa-solid" [ngClass]="card.icon"></i>
+              </div>
+              <div>
+                <p>{{ card.label }}</p>
+                <h3>{{ getCountForStatus(card.status) }}</h3>
+              </div>
+            </article>
+          </section>
+
+          <ng-template #statsFallback>
+            <section class="stats loading">
+              <p *ngIf="!statsError()">Cargando estadísticas...</p>
+              <p class="error" *ngIf="statsError()">{{ statsError() }}</p>
+            </section>
+          </ng-template>
+
+          <section class="shortcuts">
+            <article class="shortcut" (click)="navigateTo('EXHORTO')">
+              <h4>Exhortos</h4>
+              <p>Expedientes en etapa de exhorto y colaboración.</p>
+            </article>
+            <article class="shortcut" (click)="navigateTo('EN_PROCESO')">
+              <h4>En proceso</h4>
+              <p>Casos activos que requieren seguimiento.</p>
+            </article>
+            <article class="shortcut" (click)="navigateTo('TERMINADO')">
+              <h4>Terminados</h4>
+              <p>Historico de asuntos finalizados para consulta.</p>
+            </article>
+            <article class="shortcut" (click)="navigateTo('ARCHIVADO')">
+              <h4>Archivados</h4>
+              <p>Expedientes resguardados o en espera.</p>
+            </article>
+          </section>
         </main>
       
         

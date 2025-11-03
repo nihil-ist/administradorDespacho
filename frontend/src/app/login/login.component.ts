@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       user: ['', [Validators.required]],
       pass: ['', [Validators.required, Validators.minLength(6)]]
@@ -30,6 +31,8 @@ export class LoginComponent {
         next: (response: any) => {
           console.log('Login exitoso', response);
           alert('Login exitoso. Bienvenido.');
+          this.router.navigate(["/home"]);
+
         },
         error: (err: any) => {
           console.error('Error en el login:', err);

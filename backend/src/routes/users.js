@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const { User, rolesPermitidos } = require('../models/User');
 
 const formatearRespuestaUsuario = (usuario) => {
@@ -48,10 +49,12 @@ router.post('/', async (req, res) => {
       });
     }
 
+    const hashedPassword = await bcrypt.hash(contrasena, 10);
+
     const nuevoUsuario = new User({
       usuario: usuario.trim(),
       correo: correo.trim().toLowerCase(),
-      contrasena,
+      contrasena: hashedPassword,
       tipo,
       nombre: nombre.trim(),
     });
@@ -92,7 +95,9 @@ router.put('/:id', async (req, res) => {
     const actualizaciones = {};
     if (usuario) actualizaciones.usuario = usuario.trim();
     if (correo) actualizaciones.correo = correo.trim().toLowerCase();
-    if (contrasena) actualizaciones.contrasena = contrasena;
+    if (contrasena) {
+      actualizaciones.contrasena = await bcrypt.hash(contrasena, 10);
+    }
     if (typeof activo === 'boolean') actualizaciones.activo = activo;
     if (nombre) actualizaciones.nombre = nombre.trim();
     if (tipo) {

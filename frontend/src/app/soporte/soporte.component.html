@@ -1,0 +1,56 @@
+<div class="main-container">
+  <div class="navbar-container">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="soporte-container">
+    <header class="soporte-header">
+      <h1>Soporte Técnico</h1>
+      <p>¿Tienes algún problema o duda? Contáctanos.</p>
+    </header>
+
+    <main class="soporte-main">
+      <section class="form-section">
+        <h2>Enviar un ticket</h2>
+        <div class="form-grid">
+          <label>Nombre:</label>
+          <input type="text" placeholder="Tu nombre completo" [(ngModel)]="ticket.nombre">
+
+          <label>Correo electrónico:</label>
+          <input type="email" placeholder="tu.correo@ejemplo.com" [(ngModel)]="ticket.correo">
+
+          <label>Asunto:</label>
+          <select [(ngModel)]="ticket.asunto">
+            <option>Problema con expediente</option>
+            <option>Error en agenda</option>
+            <option>Consulta general</option>
+            <option>Otro</option>
+          </select>
+
+          <label>Mensaje:</label>
+          <textarea placeholder="Describe tu problema..." [(ngModel)]="ticket.mensaje"></textarea>
+
+          <label>Adjuntar archivo:</label>
+          <input type="file" accept=".pdf,.doc,.docx,.jpg,.png">
+
+          <button class="btn-enviar" (click)="enviarTicket()">Enviar ticket</button>
+        </div>
+      </section>
+
+      <section class="faq-section">
+        <h2>Preguntas frecuentes</h2>
+        <div class="faq-item" *ngFor="let faq of faqs">
+          <p class="pregunta" (click)="faq.abierto = !faq.abierto">{{ faq.pregunta }}</p>
+          <p class="respuesta" *ngIf="faq.abierto">{{ faq.respuesta }}</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="soporte-footer">
+      <p>&copy; 2025 LOF</p>
+      <a routerLink="/home">Inicio</a> |
+      <a routerLink="/agenda">Agenda</a> |
+      <a routerLink="/directorio">Directorio</a>
+    </footer>
+  </div>
+</div>

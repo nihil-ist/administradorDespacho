@@ -10,6 +10,7 @@ import { AddUserComponent } from './herramientas/add-user/add-user.component';
 import { DirectorioComponent } from './directorio/directorio.component';
 import { config } from '@fullcalendar/core/internal';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
+import { SoporteComponent } from './soporte/soporte.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent, data: {title: 'Iniciar Sesión | LOF'}},
@@ -22,5 +23,6 @@ export const routes: Routes = [
     {path: 'herramientas/usuarios', component: UsuariosComponent, data: {title: 'Herramientas - Usuarios | LOF'}},
     {path: 'herramientas/usuarios/nuevo', component: AddUserComponent, data: {title: 'Herramientas - Nuevo Usuario | LOF'}},
     {path: 'configuracion', component: ConfiguracionComponent, data: {title: 'Configuración | LOF' }},
+    {path: 'soporte', component: SoporteComponent, data: {title: 'Soporte | LOF' }},
     {path:  '**', pathMatch:"full", redirectTo: 'login'}
 ];

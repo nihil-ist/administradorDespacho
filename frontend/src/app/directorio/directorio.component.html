@@ -1,22 +1,54 @@
 <div class="main-container">
-  
-    <div class="navbar-container">
-      <app-navbar></app-navbar>
-    </div>
-    
-    <div class="nExp-container">
-      
-        <main class="nExp-main">
-          
-        </main>
-      
-        <footer class="nExp-footer">
-          <p>&copy; 2025 LOF</p>
-          <a href="/home">Inicio</a> | 
-          <a href="/configuracion">Configuración</a> | 
-          <a href="/soporte">Soporte</a> | 
-          <a href="/contacto">Contacto</a>
-        </footer>
+  <div class="navbar-container">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="directorio-container">
+    <header class="directorio-header">
+      <h1>Directorio de Clientes</h1>
+      <input
+        type="text"
+        placeholder="Buscar cliente..."
+        [(ngModel)]="searchTerm"
+        class="search-box"
+      />
+    </header>
+
+    <main class="directorio-main">
+      <div class="cards-grid">
+        <div
+          *ngFor="let cliente of filteredClientes()"
+          class="card"
+        >
+          <img
+            [src]="cliente.foto || 'assets/user-placeholder.png'"
+            alt="Foto del cliente"
+            class="card-img"
+          />
+          <div class="card-info">
+            <h3>{{ cliente.nombre }}</h3>
+            <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+            <p><strong>Email:</strong> {{ cliente.email }}</p>
+            <p><strong>Empresa:</strong> {{ cliente.empresa }}</p>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-ver" (click)="verDetalles(cliente)">
+              Ver más
+            </button>
+            <button class="btn-editar" (click)="editarCliente(cliente)">
+              Editar
+            </button>
+          </div>
+        </div>
       </div>
-      
+    </main>
+
+    <footer class="directorio-footer">
+      <p>&copy; 2025 LOF</p>
+      <a routerLink="/home">Inicio</a> |
+      <a routerLink="/agenda">Agenda</a> |
+      <a routerLink="/soporte">Soporte</a>
+    </footer>
+  </div>
 </div>

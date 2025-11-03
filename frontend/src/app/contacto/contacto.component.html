@@ -1,0 +1,47 @@
+<div class="main-container">
+  <div class="navbar-container">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="contacto-container">
+    <header class="contacto-header">
+      <h1>Contacto</h1>
+      <p>Escríbenos y te responderemos lo antes posible.</p>
+    </header>
+
+    <main class="contacto-main">
+      <section class="form-section">
+        <h2>Envíanos un mensaje</h2>
+        <div class="form-grid">
+          <label>Nombre:</label>
+          <input type="text" placeholder="Tu nombre completo" [(ngModel)]="mensaje.nombre">
+
+          <label>Correo electrónico:</label>
+          <input type="email" placeholder="tu.correo@ejemplo.com" [(ngModel)]="mensaje.correo">
+
+          <label>Asunto:</label>
+          <input type="text" placeholder="Tema del mensaje" [(ngModel)]="mensaje.asunto">
+
+          <label>Mensaje:</label>
+          <textarea placeholder="Escribe tu mensaje aquí..." [(ngModel)]="mensaje.mensaje"></textarea>
+
+          <button class="btn-enviar" (click)="enviarMensaje()">Enviar mensaje</button>
+        </div>
+      </section>
+
+      <section class="info-section">
+        <h2>Información de contacto</h2>
+        <p><strong>Dirección:</strong> Calle Ejemplo #123, Ciudad, Estado</p>
+        <p><strong>Teléfono:</strong> 555-123-4567</p>
+        <p><strong>Email:</strong> contacto&#64;despacho.com</p>
+      </section>
+    </main>
+
+    <footer class="contacto-footer">
+      <p>&copy; 2025 LOF</p>
+      <a routerLink="/home">Inicio</a> |
+      <a routerLink="/agenda">Agenda</a> |
+      <a routerLink="/directorio">Directorio</a>
+    </footer>
+  </div>
+</div>

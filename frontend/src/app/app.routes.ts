@@ -11,6 +11,7 @@ import { DirectorioComponent } from './directorio/directorio.component';
 import { config } from '@fullcalendar/core/internal';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { SoporteComponent } from './soporte/soporte.component';
+import { ContactoComponent } from './contacto/contacto.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent, data: {title: 'Iniciar Sesión | LOF'}},
@@ -24,5 +25,6 @@ export const routes: Routes = [
     {path: 'herramientas/usuarios/nuevo', component: AddUserComponent, data: {title: 'Herramientas - Nuevo Usuario | LOF'}},
     {path: 'configuracion', component: ConfiguracionComponent, data: {title: 'Configuración | LOF' }},
     {path: 'soporte', component: SoporteComponent, data: {title: 'Soporte | LOF' }},
+    {path: 'contacto', component: ContactoComponent, data: {title: 'Contacto | LOF' }},
     {path:  '**', pathMatch:"full", redirectTo: 'login'}
 ];

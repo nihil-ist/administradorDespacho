@@ -1,0 +1,91 @@
+<div class="main-container">
+  <div class="navbar-container">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="config-container">
+    <aside class="sidebar">
+      <h3>Configuración</h3>
+      <ul>
+        <li [class.active]="seccion === 'perfil'" (click)="cambiarSeccion('perfil')">
+          <i class="fa fa-user"></i> Perfil
+        </li>
+        <li [class.active]="seccion === 'apariencia'" (click)="cambiarSeccion('apariencia')">
+          <i class="fa fa-palette"></i> Apariencia
+        </li>
+        <li [class.active]="seccion === 'notificaciones'" (click)="cambiarSeccion('notificaciones')">
+          <i class="fa fa-bell"></i> Notificaciones
+        </li>
+        <li [class.active]="seccion === 'seguridad'" (click)="cambiarSeccion('seguridad')">
+          <i class="fa fa-lock"></i> Seguridad
+        </li>
+      </ul>
+    </aside>
+
+    <main class="config-main">
+      <!-- PERFIL -->
+      <section *ngIf="seccion === 'perfil'">
+        <h2>Perfil del Usuario</h2>
+        <div class="form-grid">
+          <label>Nombre:</label>
+          <input type="text" placeholder="Tu nombre completo" [(ngModel)]="perfil.nombre">
+
+          <label>Correo electrónico:</label>
+          <input type="email" placeholder="tu.correo@ejemplo.com" [(ngModel)]="perfil.correo">
+
+          <label>Teléfono:</label>
+          <input type="text" placeholder="555-123-4567" [(ngModel)]="perfil.telefono">
+
+          <label>Foto de perfil:</label>
+          <input type="file" accept="image/*">
+
+          <button class="btn-guardar" (click)="guardarCambios()">Guardar cambios</button>
+        </div>
+      </section>
+
+      <!-- APARIENCIA -->
+      <section *ngIf="seccion === 'apariencia'">
+        <h2>Apariencia</h2>
+        <p>Personaliza el tema visual del sistema.</p>
+        <div class="theme-options">
+          <div class="theme-card" [class.active]="tema === 'claro'" (click)="tema = 'claro'">
+            <div class="theme-preview claro"></div>
+            <p>Tema Claro</p>
+          </div>
+          <div class="theme-card" [class.active]="tema === 'oscuro'" (click)="tema = 'oscuro'">
+            <div class="theme-preview oscuro"></div>
+            <p>Tema Oscuro</p>
+          </div>
+        </div>
+        <button class="btn-guardar" (click)="guardarTema()">Aplicar tema</button>
+      </section>
+
+      <!-- NOTIFICACIONES -->
+      <section *ngIf="seccion === 'notificaciones'">
+        <h2>Notificaciones</h2>
+        <label>
+          <input type="checkbox" [(ngModel)]="notificaciones.email"> Notificaciones por correo
+        </label>
+        <label>
+          <input type="checkbox" [(ngModel)]="notificaciones.agenda"> Recordatorios de agenda
+        </label>
+        <label>
+          <input type="checkbox" [(ngModel)]="notificaciones.actualizaciones"> Avisos de actualizaciones
+        </label>
+        <button class="btn-guardar" (click)="guardarNotificaciones()">Guardar preferencias</button>
+      </section>
+
+      <!-- SEGURIDAD -->
+      <section *ngIf="seccion === 'seguridad'">
+        <h2>Seguridad</h2>
+        <label>Contraseña actual:</label>
+        <input type="password" placeholder="********">
+        <label>Nueva contraseña:</label>
+        <input type="password" placeholder="********">
+        <label>Confirmar nueva contraseña:</label>
+        <input type="password" placeholder="********">
+        <button class="btn-guardar">Actualizar contraseña</button>
+      </section>
+    </main>
+  </div>
+</div>

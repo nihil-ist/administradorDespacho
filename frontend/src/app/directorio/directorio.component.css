@@ -1,93 +1,137 @@
-.nExp-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    color: #333;
-    font-family: 'Arial', sans-serif;
-    min-height: calc(100vh - 60px);
-  }
+.main-container {
+  background: linear-gradient(90deg, #73bd24, #AECA0B);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-  .main-container {
-    background: linear-gradient(90deg, #73bd24, #AECA0B);
-  }
+.navbar-container {
+  background-color: #fcfcfa;
+  box-shadow: 0px 0px 24px #434a19;
+}
 
-  .navbar-container {
-    background-color: #fcfcfa;
-    box-shadow: 0px 0px 24px #434a19;
-  }
-  
-  .nExp-header {
-    text-align: center;
-    padding: 1rem;
-    background-color: #AECA0B;
-    color: white;
-    width: 100%;
-  }
-  
-  .logo {
-    height: 50px;
-    margin-bottom: 0.5rem;
-  }
-  
-  .nExp-main {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .menu-item {
-    background-color: #fff;
-    padding: 5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-  }
-  
-  .menu-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
+.directorio-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
 
-  .menu-item:hover > i {
-    color:#73bd24;
-  }
-  
-  .menu-item i {
-    font-size: 6rem;
-    color: #AECA0B;
-    /* color: #73bd24; */
-  }
-  
-  .menu-item p {
-    margin: 0.5rem 0 0;
-    font-weight: bold;
-  }
-  
-  .nExp-footer {
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.875rem;
-    background-color: #fcfcfa;
-    width: 100%;
-	  box-shadow: 0px 0px 24px #434a19;
+.directorio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #AECA0B;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
 
-  }
+.search-box {
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  width: 250px;
+  font-size: 1rem;
+  outline: none;
+}
 
-  .nExp-footer a {
-    color: #AECA0B;
-  }
+.directorio-main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+}
 
-  .nExp-footer a:hover {
-    color: #73bd24;
-  }
-  
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  transition: 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.card-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid #AECA0B;
+}
+
+.card-info {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.card-info h3 {
+  color: #2d2d2d;
+  margin-bottom: 0.5rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-ver, .btn-editar {
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: 0.2s;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-ver {
+  background-color: #73bd24;
+}
+
+.btn-ver:hover {
+  background-color: #5aa51c;
+}
+
+.btn-editar {
+  background-color: #AECA0B;
+}
+
+.btn-editar:hover {
+  background-color: #96b709;
+}
+
+.directorio-footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #fcfcfa;
+  box-shadow: 0px 0px 24px #434a19;
+  font-size: 0.875rem;
+}
+
+.directorio-footer a {
+  color: #AECA0B;
+}
+
+.directorio-footer a:hover {
+  color: #73bd24;
+}

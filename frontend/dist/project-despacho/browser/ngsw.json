@@ -1,0 +1,108 @@
+{
+  "configVersion": 1,
+  "timestamp": 1762185073149,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main-BIRQFXKD.js",
+        "/polyfills-FFHMD2TL.js",
+        "/scripts-FR7HA4WI.js",
+        "/styles-LRGZH4WF.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/caca.jpg",
+        "/assets/diega.jpg",
+        "/assets/favicon.ico",
+        "/assets/icons/apple-touch-icon.png",
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/logo.png",
+        "/assets/muriel.jpg",
+        "/manifest.webmanifest"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-calls",
+      "patterns": [
+        "https:\\/\\/tu-api-produccion\\/.*"
+      ],
+      "strategy": "performance",
+      "maxSize": 50,
+      "maxAge": 43200000,
+      "timeoutMs": 10000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
+  "hashTable": {
+    "/assets/caca.jpg": "2a4df47213e00d805db6cbe018fe0c2a2d84bd1b",
+    "/assets/diega.jpg": "f382b05e00bfaddcbb4136715741ab3a1dec2831",
+    "/assets/favicon.ico": "c9836a7efd5f69394c507ef8839024f968cc0669",
+    "/assets/icons/apple-touch-icon.png": "d99e0e665b5daa4eba1e8c4c717594766616dbf0",
+    "/assets/icons/icon-128x128.png": "d0a23d40333b95749b1e0a17dba42a3f349a571b",
+    "/assets/icons/icon-144x144.png": "34329d4faf0612bbc0d2fda36827ca14d2eb010c",
+    "/assets/icons/icon-152x152.png": "7b28cbb134dde355ea64a3e6d8fe16b0b53661de",
+    "/assets/icons/icon-192x192.png": "b80ec740290591e4080775df435c529c79f62ccf",
+    "/assets/icons/icon-384x384.png": "25d636be3eeda5ceb31fec4f084e19374bd24ad7",
+    "/assets/icons/icon-512x512.png": "e3721ead18110666bb92a69a6714584b329eb3fa",
+    "/assets/icons/icon-72x72.png": "cea31f572f8f2a6e98695eb24c405bcf8fb713f0",
+    "/assets/icons/icon-96x96.png": "7e150aa3a74aa02fc384537dcfdd67cc56a4876f",
+    "/assets/logo.png": "fe90bd9fb1932475fb38cbfb0b479501ddc477f0",
+    "/assets/muriel.jpg": "cded6ea97c33148e436890c91b61bf27db259884",
+    "/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/index.html": "d1d532ed8ffa67103db7f31d5df46769da919af8",
+    "/main-BIRQFXKD.js": "4f30ea6776947e14da915cc49bc082cf2e77bd2a",
+    "/manifest.webmanifest": "97a030d352a9a58d7a272d1b988e9ede91ba8a56",
+    "/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
+    "/scripts-FR7HA4WI.js": "d94cf74ed9a205c61bacb1835dd9d77ca8585918",
+    "/styles-LRGZH4WF.css": "f50c3980ea066c52e69fa60b5ddc58c3b0b543d8"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}

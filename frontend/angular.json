@@ -22,6 +22,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
+              "src/manifest.webmanifest",
               "src/assets",
               {
                 "glob": "**/*",
@@ -35,10 +36,11 @@
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
-          ]
+            ]
           },
           "configurations": {
             "production": {
+              "serviceWorker": "ngsw-config.json",
               "optimization": {
                 "fonts": {
                   "inline": false

@@ -11,10 +11,12 @@ app.use(express.json());
 const authRoutes = require('./routes/login');
 const userRoutes = require('./routes/users');
 const expedientesRoutes = require('./routes/expedientes');
+const agendaRoutes = require('./routes/agenda');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/expedientes', expedientesRoutes);
+app.use('/api/agenda', agendaRoutes);
 
 app.get('/', (_req, res) => {
     res.status(200).json({ message: 'API Administrador Despacho operativo' });

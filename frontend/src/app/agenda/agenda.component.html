@@ -1,22 +1,181 @@
-<div class="main-container">
-  
-    <div class="navbar-container">
-      <app-navbar></app-navbar>
-    </div>
-    
-    <div class="agenda-container">
-      
-        <main class="agenda-main">
-            <full-calendar [options]="calendarOptions"></full-calendar>
-        </main>
-      
-        <footer class="agenda-footer">
-          <p>&copy; 2025 LOF</p>
-          <a href="/home">Inicio</a> | 
-          <a href="/configuracion">Configuración</a> | 
-          <a href="/soporte">Soporte</a> | 
-          <a href="/contacto">Contacto</a>
-        </footer>
+<div class="agenda-page">
+  <div class="navbar-container">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="agenda-wrapper">
+    <header class="agenda-header">
+      <div>
+        <h1>Agenda</h1>
+        <p>
+          {{ isAdmin ? 'Consulta y gestiona los eventos de todo el equipo.' : 'Organiza tus audiencias, citas y recordatorios en un solo lugar.' }}
+        </p>
       </div>
-      
+      <button type="button" class="primary-btn" (click)="openCreateModal()">Nuevo evento</button>
+    </header>
+
+    <section class="agenda-filters" *ngIf="isAdmin">
+      <label for="ownerSelect">Ver agenda de</label>
+  <select id="ownerSelect" [value]="selectedOwnerId" (change)="onOwnerChange($any($event.target).value)">
+        <option value="ALL">Todo el equipo</option>
+        <option *ngIf="currentUserId" [value]="currentUserId">Mi agenda</option>
+        <option *ngFor="let usuario of availableUsers" [value]="usuario._id">
+          {{ usuario.nombre }} ({{ usuario.tipo }})
+        </option>
+      </select>
+      <span class="filters-status" *ngIf="usersLoading">Cargando usuarios…</span>
+      <span class="filters-status error" *ngIf="usersError">{{ usersError }}</span>
+    </section>
+
+    <section class="agenda-content">
+      <div class="calendar-container">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+
+        <div class="calendar-overlay" *ngIf="isLoadingEvents">
+          <span>Cargando eventos…</span>
+        </div>
+
+        <div class="calendar-error" *ngIf="eventsError">{{ eventsError }}</div>
+      </div>
+
+      <aside class="agenda-sidebar">
+        <section class="sidebar-section">
+          <header>
+            <h2>Próximos eventos</h2>
+            <button type="button" class="link-button" (click)="loadUpcomingEvents()" [disabled]="upcomingLoading">Actualizar</button>
+          </header>
+
+          <ng-container *ngIf="!upcomingLoading; else upcomingLoadingTpl">
+            <p class="empty" *ngIf="upcomingEvents.length === 0">Sin eventos próximos.</p>
+
+            <ul class="upcoming-list" *ngIf="upcomingEvents.length > 0">
+              <li *ngFor="let event of upcomingEvents; trackBy: trackByEventId" [style.border-left-color]="mapEventColor(event.tipo)">
+                <div class="title-row">
+                  <span class="title">{{ event.titulo }}</span>
+                  <span class="badge" [ngStyle]="{ background: mapEventColor(event.tipo), color: mapEventTextColor(event.tipo) }">
+                    {{ getTipoLabel(event.tipo) }}
+                  </span>
+                </div>
+                <div class="meta">{{ formatEventDate(event.fechaInicio, event.allDay) }} · {{ formatEventTimeRange(event) }}</div>
+                <div class="meta" *ngIf="event.expediente">Expediente {{ event.expediente.numeroControl }} · {{ event.expediente.titulo }}</div>
+                <button type="button" class="link-button" (click)="focusEvent(event._id)">Ver en calendario</button>
+              </li>
+            </ul>
+
+            <div class="error" *ngIf="upcomingError">{{ upcomingError }}</div>
+          </ng-container>
+
+          <ng-template #upcomingLoadingTpl>
+            <p class="loading">Cargando próximos eventos…</p>
+          </ng-template>
+        </section>
+
+        <section class="sidebar-section" *ngIf="selectedEvent">
+          <header>
+            <h2>Evento seleccionado</h2>
+          </header>
+
+          <div class="selected-event">
+            <h3>{{ selectedEvent!.titulo }}</h3>
+            <p class="meta">
+              {{ formatEventDate(selectedEvent!.fechaInicio, selectedEvent!.allDay) }} ·
+              {{ formatEventTimeRange(selectedEvent!) }}
+            </p>
+            <p class="meta">Tipo: {{ getTipoLabel(selectedEvent!.tipo) }}</p>
+            <p class="meta">Responsable: {{ ownerDisplay(selectedEvent!) }}</p>
+            <p class="meta" *ngIf="selectedEvent!.ubicacion">Lugar: {{ selectedEvent!.ubicacion }}</p>
+            <ng-container *ngIf="selectedEvent!.expediente as expediente">
+              <p class="meta">
+                Expediente: {{ expediente.numeroControl }} · {{ expediente.titulo }}
+              </p>
+            </ng-container>
+            <p class="description" *ngIf="selectedEvent!.descripcion">{{ selectedEvent!.descripcion }}</p>
+
+            <div class="actions">
+              <button type="button" class="secondary-btn" (click)="openEditModal(selectedEvent!)">Editar</button>
+              <button type="button" class="danger-btn" (click)="deleteEvent(selectedEvent!)" [disabled]="formSubmitting">Eliminar</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </div>
+
+  <div class="agenda-modal" *ngIf="modalOpen">
+    <div class="agenda-modal__backdrop" (click)="closeModal()"></div>
+    <div class="agenda-modal__content">
+      <header class="modal-header">
+        <h2>{{ modalMode === 'create' ? 'Nuevo evento' : 'Editar evento' }}</h2>
+        <button type="button" class="close-btn" (click)="closeModal()" aria-label="Cerrar">&times;</button>
+      </header>
+
+      <form [formGroup]="eventForm" (ngSubmit)="submitEvent()" class="modal-form">
+        <div class="form-row">
+          <label for="titulo">Título<span class="required">*</span></label>
+          <input id="titulo" type="text" formControlName="titulo" maxlength="120" placeholder="Ej. Audiencia inicial">
+        </div>
+
+        <div class="form-row">
+          <label for="tipo">Tipo</label>
+          <select id="tipo" formControlName="tipo">
+            <option *ngFor="let type of eventTypes" [value]="type">{{ getTipoLabel(type) }}</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="fecha">Fecha<span class="required">*</span></label>
+          <input id="fecha" type="date" formControlName="fecha">
+        </div>
+
+        <div class="form-row time-row">
+          <div>
+            <label for="horaInicio">Hora inicio<span class="required" *ngIf="!eventForm.get('allDay')?.value">*</span></label>
+            <input id="horaInicio" type="time" formControlName="horaInicio" [disabled]="eventForm.get('allDay')?.value">
+          </div>
+          <div>
+            <label for="horaFin">Hora fin</label>
+            <input id="horaFin" type="time" formControlName="horaFin" [disabled]="eventForm.get('allDay')?.value">
+          </div>
+        </div>
+
+        <div class="form-row checkbox-row">
+          <label>
+            <input type="checkbox" formControlName="allDay">
+            Evento de todo el día
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label for="expediente">Expediente relacionado</label>
+          <select id="expediente" formControlName="expedienteId" [disabled]="expedientesLoading">
+            <option value="">Sin expediente</option>
+            <option *ngFor="let expediente of expedientes" [value]="expediente._id">
+              {{ expediente.numeroControl }} · {{ expediente.titulo }}
+            </option>
+          </select>
+          <small class="hint" *ngIf="expedientesLoading">Cargando expedientes…</small>
+          <small class="hint error" *ngIf="expedientesError">{{ expedientesError }}</small>
+        </div>
+
+        <div class="form-row">
+          <label for="ubicacion">Ubicación</label>
+          <input id="ubicacion" type="text" formControlName="ubicacion" maxlength="120" placeholder="Ej. Juzgado 5, sala 3">
+        </div>
+
+        <div class="form-row">
+          <label for="descripcion">Descripción / notas</label>
+          <textarea id="descripcion" rows="4" formControlName="descripcion" maxlength="500" placeholder="Anota detalles relevantes del evento"></textarea>
+        </div>
+
+        <div class="form-error" *ngIf="formError">{{ formError }}</div>
+
+        <div class="form-actions">
+          <button type="button" class="secondary-btn" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="primary-btn" [disabled]="formSubmitting">
+            {{ formSubmitting ? 'Guardando…' : (modalMode === 'create' ? 'Crear evento' : 'Guardar cambios') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

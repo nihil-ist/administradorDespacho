@@ -43,12 +43,16 @@
                         <button
                             class="button login__submit"
                             type="submit"
-                            [disabled]="loginForm.invalid"
+                            [disabled]="loginForm.invalid || isSubmitting"
                         >
-                            <span class="button__text">Iniciar sesión</span>
+                            <span class="button__text">{{ isSubmitting ? 'Ingresando...' : 'Iniciar sesión' }}</span>
                             <!-- <i class="button__icon fas fa-chevron-right"></i> -->
                         </button>
                     </form>
+                    <div class="login__error" *ngIf="errorMessage">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ errorMessage }}</span>
+                    </div>
                     <!-- <div class="social-login">
                         <h3>Log in via</h3>
                         <div class="social-icons">

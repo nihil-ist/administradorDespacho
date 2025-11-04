@@ -1,43 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { AuthUser } from '../models/user.model';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
 
-  isAuthenticated: boolean = false;
-  role: string | null = null;
-  name: string | null = null;
   menuOpen: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
   
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
-  // ngOnInit(): void {
-  //   this.isAuthenticated = this.authService.isAuthenticated();
-  //   this.role = this.authService.getRole();
-  //   this.name = this.authService.getName();
-  // }
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
 
-  // logout(): void {
-  //   this.authService.logout();
-  //   this.isAuthenticated = false;
-  //   this.router.navigate(['/home']);
-  // }
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 
-  // goToRolePage(): void {
-  //   if (this.role) {
-  //     this.router.navigate([`/${this.role}`]);
-  //   }
-  // }
+  currentUser(): AuthUser | null {
+    return this.authService.getCurrentUser();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.menuOpen = false;
+    this.router.navigate(['/login']);
+  }
 }

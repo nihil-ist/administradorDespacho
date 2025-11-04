@@ -8,10 +8,14 @@
         <main class="exp-main">
           <section class="hero">
             <div>
-              <h1>Expedientes del despacho</h1>
-              <p>Controla los asuntos por estado, crea nuevos expedientes y consulta su documentación centralizada.</p>
+              <h1>{{ isAdmin ? 'Expedientes del despacho' : 'Mis expedientes' }}</h1>
+              <p>
+                {{ isAdmin
+                  ? 'Controla los asuntos por estado, crea nuevos expedientes y consulta su documentación centralizada.'
+                  : 'Consulta y da seguimiento a los expedientes asignados a tu usuario.' }}
+              </p>
             </div>
-            <button class="primary" (click)="navigateTo('nuevoExpediente')">
+            <button class="primary" *ngIf="canCreateExpediente" (click)="navigateTo('nuevoExpediente')">
               <i class="fa-solid fa-file-circle-plus"></i>
               <span>Nuevo expediente</span>
             </button>

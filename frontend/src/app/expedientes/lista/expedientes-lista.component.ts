@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { ExpedientesService } from '../../../services/expedientes.service';
 import { Expediente, ExpedienteEstado } from '../../models/expediente.model';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-expedientes-lista',
@@ -41,12 +42,21 @@ export class ExpedientesListaComponent implements OnInit, OnDestroy {
 
   searchControl = new FormControl('', { nonNullable: true });
   totalRegistros = computed(() => this.expedientes().length);
+  readonly isAdmin: boolean;
+  readonly canCreateExpediente: boolean;
+  readonly assignedLabel?: string;
 
   constructor(
     private readonly expedientesService: ExpedientesService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) {
+    this.isAdmin = this.authService.isAdmin();
+    this.canCreateExpediente = this.authService.hasAnyRole(['ADMINISTRADOR', 'ABOGADO']);
+    const currentUser = this.authService.getCurrentUser();
+    this.assignedLabel = currentUser?.nombre || currentUser?.usuario || undefined;
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {

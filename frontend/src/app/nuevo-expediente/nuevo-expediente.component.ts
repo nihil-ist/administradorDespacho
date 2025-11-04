@@ -7,6 +7,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { ExpedientesService } from '../../services/expedientes.service';
 import { FirebaseStorageService, UploadedFileMetadata } from '../../services/firebase-storage.service';
 import { ExpedienteEstado, ExpedientePayload } from '../models/expediente.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-nuevo-expediente',
@@ -34,6 +35,7 @@ export class NuevoExpedienteComponent {
     private fb: FormBuilder,
     private expedientesService: ExpedientesService,
     private firebaseStorage: FirebaseStorageService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.expedienteForm = this.fb.group({
@@ -50,6 +52,14 @@ export class NuevoExpedienteComponent {
       notasInternas: ['', Validators.maxLength(500)],
       etiquetas: [''],
     });
+
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && !this.authService.isAdmin()) {
+      const assigned = this.authService.getAssignmentIdentifier();
+      if (assigned) {
+        this.expedienteForm.patchValue({ abogadoAsignado: assigned });
+      }
+    }
   }
 
   get formControls() {
@@ -89,11 +99,15 @@ export class NuevoExpedienteComponent {
           .filter((etiqueta: string) => etiqueta.length > 0)
       : [];
 
+    const assignedIdentifier = this.authService.isAdmin()
+      ? valores.abogadoAsignado.trim()
+      : this.authService.getAssignmentIdentifier() || valores.abogadoAsignado.trim();
+
     return {
       titulo: valores.titulo.trim(),
       numeroControl: valores.numeroControl.trim(),
       cliente: valores.cliente.trim(),
-      abogadoAsignado: valores.abogadoAsignado.trim(),
+      abogadoAsignado: assignedIdentifier,
       tipo: valores.tipo.trim(),
       estatus: valores.estatus,
       fechaApertura: this.toIsoDate(valores.fechaApertura) as string,
@@ -130,6 +144,10 @@ export class NuevoExpedienteComponent {
         this.uploadResults.set(archivosSubidos);
       }
 
+      if (!this.authService.isAdmin()) {
+        payload.abogadoAsignado = this.authService.getAssignmentIdentifier() || payload.abogadoAsignado;
+      }
+
       const respuesta = await firstValueFrom(this.expedientesService.createExpediente(payload));
 
       this.submitSuccess.set('Expediente creado correctamente.');
@@ -156,5 +174,9 @@ export class NuevoExpedienteComponent {
     }
 
     this.router.navigate(['/expedientes']);
+  }
+
+  canAssignAbogado(): boolean {
+    return this.authService.isAdmin();
   }
 }

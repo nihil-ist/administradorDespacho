@@ -103,6 +103,13 @@
   margin-top: 0.35rem;
 }
 
+.helper {
+  display: block;
+  font-size: 0.8rem;
+  color: #4c5a32;
+  margin-top: 0.35rem;
+}
+
 .upload-section {
   margin-top: 2.5rem;
   padding-top: 2rem;

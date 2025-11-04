@@ -3,6 +3,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ExpedientesService } from '../../services/expedientes.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-expedientes',
@@ -22,7 +23,7 @@ export class ExpedientesComponent implements OnInit {
   stats = signal<{ total: number; porEstado: Record<string, number> } | null>(null);
   statsError = signal<string | null>(null);
 
-  constructor(private router: Router, private expedientesService: ExpedientesService) {}
+  constructor(private router: Router, private expedientesService: ExpedientesService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadStats();
@@ -54,5 +55,13 @@ export class ExpedientesComponent implements OnInit {
   getCountForStatus(status: string): number {
     const current = this.stats();
     return current?.porEstado?.[status] ?? 0;
+  }
+
+  get canCreateExpediente(): boolean {
+    return this.authService.hasAnyRole(['ADMINISTRADOR', 'ABOGADO']);
+  }
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

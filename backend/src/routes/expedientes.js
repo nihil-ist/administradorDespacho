@@ -16,7 +16,7 @@ const normalizarArchivos = (archivos = []) =>
       size: archivo.size || null,
     }));
 
-const construirFiltro = ({ status, search }) => {
+const construirFiltro = ({ status, search, assignedTo }) => {
   const filtro = {};
 
   if (status) {
@@ -38,13 +38,17 @@ const construirFiltro = ({ status, search }) => {
     ];
   }
 
+  if (assignedTo) {
+    filtro.abogadoAsignado = assignedTo.trim();
+  }
+
   return filtro;
 };
 
 router.get('/', async (req, res) => {
   try {
-    const { status, search, limit } = req.query;
-    const filtro = construirFiltro({ status, search });
+    const { status, search, limit, assignedTo } = req.query;
+    const filtro = construirFiltro({ status, search, assignedTo });
     const limite = limit ? Math.min(Number(limit), 100) : undefined;
 
     const expedientes = await Expediente.find(filtro)
@@ -63,11 +67,20 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/stats', async (_req, res) => {
+router.get('/stats', async (req, res) => {
   try {
-    const resultado = await Expediente.aggregate([
-      { $group: { _id: '$estatus', total: { $sum: 1 } } },
-    ]);
+    const { status, search, assignedTo } = req.query;
+    const filtro = construirFiltro({ status, search, assignedTo });
+
+    const pipeline = [];
+
+    if (Object.keys(filtro).length > 0) {
+      pipeline.push({ $match: filtro });
+    }
+
+    pipeline.push({ $group: { _id: '$estatus', total: { $sum: 1 } } });
+
+    const resultado = await Expediente.aggregate(pipeline);
 
     const conteo = estadosExpediente.reduce((acc, estado) => {
       const registro = resultado.find((item) => item._id === estado);

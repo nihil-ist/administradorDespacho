@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,15 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string | null = null;
+  isSubmitting = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.loginForm = this.fb.group({
       user: ['', [Validators.required]],
       pass: ['', [Validators.required, Validators.minLength(6)]]
@@ -23,25 +30,27 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    console.log('dentro');
-    if (this.loginForm.valid) {
-      const { user, pass } = this.loginForm.value;
-  
-      this.authService.login(user, pass).subscribe({
-        next: (response: any) => {
-          console.log('Login exitoso', response);
-          alert('Login exitoso. Bienvenido.');
-          this.router.navigate(["/home"]);
+    this.errorMessage = null;
 
-        },
-        error: (err: any) => {
-          console.error('Error en el login:', err);
-          alert('Error: Usuario o contraseña incorrectos');
-        }
-      });
-    } else {
-      console.error('Formulario inválido');
+    if (this.loginForm.invalid) {
+      this.errorMessage = 'Completa los campos obligatorios para continuar.';
+      return;
     }
+
+    const { user, pass } = this.loginForm.value;
+    this.isSubmitting = true;
+
+    this.authService.login(user, pass).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        const redirectTo = this.route.snapshot.queryParamMap.get('redirectTo');
+        this.router.navigateByUrl(redirectTo || '/home');
+      },
+      error: (err: any) => {
+        console.error('Error en el login:', err);
+        this.errorMessage = err?.error?.message || 'Usuario o contraseña incorrectos';
+        this.isSubmitting = false;
+      }
+    });
   }
-  
 }

@@ -7,12 +7,16 @@
     <main class="lista-main">
       <header class="page-header">
         <div>
-          <h1>Listado de expedientes</h1>
-          <p>
+          <h1>{{ isAdmin ? 'Listado de expedientes' : 'Mis expedientes' }}</h1>
+          <p *ngIf="isAdmin">
             {{ etiquetasEstados[filtroEstado()] }} · {{ totalRegistros() }} registro{{ totalRegistros() === 1 ? '' : 's' }}
           </p>
+          <p *ngIf="!isAdmin">
+            {{ etiquetasEstados[filtroEstado()] }} · {{ totalRegistros() }} registro{{ totalRegistros() === 1 ? '' : 's' }}
+            <ng-container *ngIf="assignedLabel">· Asignados a {{ assignedLabel }}</ng-container>
+          </p>
         </div>
-        <button class="primary" type="button" [routerLink]="['/nuevoExpediente']">
+        <button class="primary" type="button" [routerLink]="['/nuevoExpediente']" *ngIf="canCreateExpediente">
           <i class="fa-solid fa-file-circle-plus"></i>
           Nuevo expediente
         </button>

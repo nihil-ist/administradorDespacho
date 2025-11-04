@@ -63,11 +63,15 @@
                     id="abogadoAsignado"
                     type="text"
                     formControlName="abogadoAsignado"
+                    [readonly]="!canAssignAbogado()"
                     [class.invalid]="formControls['abogadoAsignado'].invalid && (formControls['abogadoAsignado'].dirty || formControls['abogadoAsignado'].touched)"
                     placeholder="Nombre del responsable"
                   />
                   <small class="error" *ngIf="formControls['abogadoAsignado'].invalid && (formControls['abogadoAsignado'].dirty || formControls['abogadoAsignado'].touched)">
                     Asigna un responsable.
+                  </small>
+                  <small class="helper" *ngIf="!canAssignAbogado()">
+                    Este campo toma tu nombre automáticamente.
                   </small>
                 </div>
 

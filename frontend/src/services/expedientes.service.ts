@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Expediente, ExpedienteFilters, ExpedientePayload } from '../app/models/expediente.model';
+import { AuthService } from './auth.service';
 
 interface ExpedienteResponse {
   message: string;
@@ -18,7 +19,7 @@ interface ExpedienteStatsResponse {
 export class ExpedientesService {
   private readonly baseUrl = `${environment.apiBaseUrl}/expedientes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getExpedientes(filters: ExpedienteFilters = {}): Observable<Expediente[]> {
     let params = new HttpParams();
@@ -35,6 +36,8 @@ export class ExpedientesService {
       params = params.set('limit', filters.limit.toString());
     }
 
+    params = this.applyRoleFilter(params);
+
     return this.http.get<Expediente[]>(this.baseUrl, { params });
   }
 
@@ -43,18 +46,53 @@ export class ExpedientesService {
   }
 
   getStats(): Observable<ExpedienteStatsResponse> {
-    return this.http.get<ExpedienteStatsResponse>(`${this.baseUrl}/stats`);
+    let params = new HttpParams();
+    params = this.applyRoleFilter(params);
+    return this.http.get<ExpedienteStatsResponse>(`${this.baseUrl}/stats`, { params });
   }
 
   createExpediente(payload: ExpedientePayload): Observable<ExpedienteResponse> {
-    return this.http.post<ExpedienteResponse>(this.baseUrl, payload);
+    const currentUser = this.authService.getCurrentUser();
+    const assigned = this.authService.getAssignmentIdentifier();
+
+    const payloadWithMeta: ExpedientePayload = {
+      ...payload,
+      abogadoAsignado: this.authService.isAdmin()
+        ? payload.abogadoAsignado
+        : assigned || payload.abogadoAsignado,
+      creadoPor: payload.creadoPor ?? currentUser?._id ?? null,
+    };
+
+    return this.http.post<ExpedienteResponse>(this.baseUrl, payloadWithMeta);
   }
 
   updateExpediente(id: string, payload: Partial<ExpedientePayload>): Observable<ExpedienteResponse> {
-    return this.http.patch<ExpedienteResponse>(`${this.baseUrl}/${id}`, payload);
+    const data: Partial<ExpedientePayload> = { ...payload };
+
+    if (!this.authService.isAdmin()) {
+      const assigned = this.authService.getAssignmentIdentifier();
+      if (assigned) {
+        data.abogadoAsignado = assigned;
+      }
+    }
+
+    return this.http.patch<ExpedienteResponse>(`${this.baseUrl}/${id}`, data);
   }
 
   deleteExpediente(id: string): Observable<ExpedienteResponse> {
     return this.http.delete<ExpedienteResponse>(`${this.baseUrl}/${id}`);
+  }
+
+  private applyRoleFilter(params: HttpParams): HttpParams {
+    if (this.authService.isAdmin()) {
+      return params;
+    }
+
+    const assigned = this.authService.getAssignmentIdentifier();
+    if (assigned) {
+      return params.set('assignedTo', assigned);
+    }
+
+    return params;
   }
 }

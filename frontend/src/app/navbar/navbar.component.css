@@ -26,6 +26,34 @@ a:hover {
 
 
 
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #2d2a2e;
+}
+
+.user-info i {
+    color: #AECA0B;
+}
+
+.logout {
+    background-color: transparent;
+    border: 2px solid #AECA0B;
+    color: #2d2a2e;
+}
+
+.logout:hover {
+    background-color: #AECA0B;
+}
+
 .rolePage:hover {
     cursor: pointer;
     color: #AECA0B;
@@ -94,7 +122,8 @@ a:hover {
 }
 
 .dropdown_menu.open{
-    height: 270px;
+    height: auto;
+    padding-bottom: 0.5rem;
 }
 
 .dropdown_menu li {
@@ -102,6 +131,18 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.dropdown_logout {
+    background: none;
+    border: none;
+    color: #2d2a2e;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.dropdown_logout:hover {
+    color: #AECA0B;
 }
 
 .navbar2 .links li {
@@ -125,7 +166,8 @@ a:hover {
 
 @media (max-width: 992px){
     .navbar2 .links, 
-    .navbar2 .action_btn {
+    .navbar2 .action_btn,
+    .navbar2 .user-area {
         display: none;
     }
 

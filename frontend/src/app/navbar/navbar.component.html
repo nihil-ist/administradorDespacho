@@ -1,38 +1,45 @@
 <div class="navbar2">
-    <div class="logo">
-      <a routerLink="home">
-        <img src="assets/logo.png" alt="nose" height="40">
-      </a>
-    </div>
-    <ul class="links">
-      <li><a routerLink="/home" routerLinkActive="active">Inicio</a></li>
-      <li><a routerLink="/configuracion" routerLinkActive="active">Configuracion</a></li>
-      <li><a routerLink="/soporte" routerLinkActive="active">Soporte</a></li>
-      <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
-    </ul>
-    <!-- <ng-container *ngIf="!isAuthenticated; else loggedIn">
-      <a routerLink="/login" class="action_btn" routerLinkActive="active">join now</a>
-    </ng-container> -->
-    <!-- <ng-template #loggedIn>
-      <a class="rolePage" (click)="goToRolePage()">{{ role }}: {{ name }}</a>
-      <a class="action_btn" (click)="logout()">logout</a>
-    </ng-template> -->
-    <div class="toggle_btn" (click)="toggleMenu()">
-      <i [ngClass]="menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
-    </div>
+  <div class="logo">
+    <a routerLink="/home">
+      <img src="assets/logo.png" alt="Logo" height="40" />
+    </a>
   </div>
-  
-  <div class="dropdown_menu" [ngClass]="{'open': menuOpen}">
-    <li><a routerLink="/home" routerLinkActive="active">home</a></li>
-    <li><a routerLink="/configuracion" routerLinkActive="active">about</a></li>
-    <li><a routerLink="/soporte" routerLinkActive="active">help</a></li>
-    <li><a routerLink="/contacto" routerLinkActive="active">contact</a></li>
-    <!-- <ng-container *ngIf="!isAuthenticated; else loggedIn">
-      <a routerLink="/login" class="action_btn" routerLinkActive="active">join now</a>
-    </ng-container> -->
-    <!-- <ng-template #loggedIn>
-      <a class="rolePage" (click)="goToRolePage()">{{ role }}: <b>{{ name }}</b></a>
-      <a class="action_btn" (click)="logout()">logout</a>
-    </ng-template> -->
+  <ul class="links" *ngIf="isAuthenticated()">
+    <li><a routerLink="/home" routerLinkActive="active">Inicio</a></li>
+    <li><a routerLink="/expedientes" routerLinkActive="active">Expedientes</a></li>
+    <li *ngIf="isAdmin()"><a routerLink="/herramientas" routerLinkActive="active">Herramientas</a></li>
+    <li *ngIf="isAdmin()"><a routerLink="/configuracion" routerLinkActive="active">Configuración</a></li>
+    <li><a routerLink="/soporte" routerLinkActive="active">Soporte</a></li>
+    <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
+  </ul>
+  <ng-container *ngIf="isAuthenticated(); else loginLink">
+    <div class="user-area">
+      <div class="user-info">
+        <i class="fa-solid fa-user"></i>
+        <span>{{ currentUser()?.nombre || currentUser()?.usuario }}</span>
+      </div>
+      <button type="button" class="action_btn logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </ng-container>
+  <ng-template #loginLink>
+    <a routerLink="/login" class="action_btn">Iniciar sesión</a>
+  </ng-template>
+  <div class="toggle_btn" (click)="toggleMenu()">
+    <i [ngClass]="menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
   </div>
-  
+</div>
+
+<div class="dropdown_menu" [ngClass]="{ open: menuOpen }">
+  <li *ngIf="isAuthenticated()"><a routerLink="/home" routerLinkActive="active">Inicio</a></li>
+  <li *ngIf="isAuthenticated()"><a routerLink="/expedientes" routerLinkActive="active">Expedientes</a></li>
+  <li *ngIf="isAdmin()"><a routerLink="/herramientas" routerLinkActive="active">Herramientas</a></li>
+  <li *ngIf="isAdmin()"><a routerLink="/configuracion" routerLinkActive="active">Configuración</a></li>
+  <li *ngIf="isAuthenticated()"><a routerLink="/soporte" routerLinkActive="active">Soporte</a></li>
+  <li *ngIf="isAuthenticated()"><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
+  <li *ngIf="isAuthenticated()">
+    <button type="button" class="dropdown_logout" (click)="logout()">Cerrar sesión</button>
+  </li>
+  <li *ngIf="!isAuthenticated()">
+    <a routerLink="/login" class="action_btn">Iniciar sesión</a>
+  </li>
+</div>

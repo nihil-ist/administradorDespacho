@@ -1,34 +1,11 @@
 # Administrador Despacho
 
-## Recordatorios por correo para la agenda
+Plataforma interna para despachos jurídicos que centraliza expedientes, agenda, directorio y herramientas administrativas. El sistema tiene backend en Node.js/Express + MongoDB y frontend en Angular 18 (standalone components).
 
-El backend ahora puede enviar recordatorios automáticos para cada evento de la agenda en los siguientes momentos antes de la hora programada: 24 h, 6 h, 1 h y 15 min. Los correos se envían al email registrado del usuario propietario del evento.
+## Características principales
 
-### Configuración requerida
-
-Define las credenciales SMTP en el archivo `backend/.env` (ya creado con valores de ejemplo) o ajusta `backend/.env.example` y cópialo como `.env` antes de iniciar el backend:
-
-```
-EMAIL_HOST=smtp.tudominio.com
-EMAIL_PORT=587
-EMAIL_USER=notificaciones@tudominio.com
-EMAIL_PASS=super-secreto
-EMAIL_FROM="Administrador Despacho" <notificaciones@tudominio.com>
-# Opcional
-EMAIL_SECURE=false
-TZ=America/Mexico_City
-ENABLE_AGENDA_REMINDERS=true
-```
-
-> Si `EMAIL_FROM` no se define se usará `EMAIL_USER`. Establece `ENABLE_AGENDA_REMINDERS=false` cuando quieras desactivar temporalmente el job sin quitar la configuración.
-
-### Funcionamiento
-
-- El job se programa automáticamente al iniciar el backend (`node-cron`, corre cada minuto).
-- Solo se consideran eventos con fecha futura y se agrupan por usuario/ventana para evitar múltiples correos innecesarios.
-- Cada evento guarda internamente qué ventanas ya fueron notificadas (`recordatoriosEnviados`) para evitar duplicados.
-- Si el envío falla se reintentará en la siguiente ejecución hasta que se logre.
-
-### Dependencias nuevas
-
-Ejecuta `npm install` dentro de `backend/` para asegurarte de tener `nodemailer` y `node-cron` instalados.
+- **Autenticación y roles**: inicio de sesión con usuarios almacenados en MongoDB, contraseñas con bcrypt y guardas en Angular. Roles configurados (Administrador, Abogado, Practicante, Becario) controlan navegación, permisos y filtros.
+- **Gestión de expedientes**: creación, consulta, actualización y eliminación de expedientes, con control de archivos subidos a Firebase Storage y filtros automáticos según el abogado asignado.
+- **Agenda personal y del equipo**: calendario FullCalendar con eventos vinculados a expedientes, modal de creación/edición, panel de próximos eventos y detalle lateral.
+- **Recordatorios por correo**: al crear un evento se envía un correo inmediato al propietario y un job automático despacha recordatorios 24 h, 6 h, 1 h y 15 min antes.
+- **Herramientas administrativas**: administración de usuarios, configuración y secciones de soporte/contacto listas para contenido.

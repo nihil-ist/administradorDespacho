@@ -1,7 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 
 require('./db/conection');
+
+const { scheduleAgendaReminders } = require('./jobs/agendaReminders');
 
 const app = express();
 
@@ -29,6 +33,13 @@ app.get('/health', (_req, res) => {
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
+const reminderTaskEnabled = process.env.ENABLE_AGENDA_REMINDERS !== 'false';
+
 app.listen(PORT, HOST, () => {
     console.log(`Server running on http://${HOST}:${PORT}`);
+    if (reminderTaskEnabled) {
+        scheduleAgendaReminders();
+    } else {
+        console.log('[agendaReminders] La tarea está deshabilitada mediante ENABLE_AGENDA_REMINDERS=false');
+    }
 });

@@ -29,6 +29,14 @@ const agendaEventSchema = new mongoose.Schema(
 agendaEventSchema.index({ propietario: 1, fechaInicio: 1 });
 agendaEventSchema.index({ fechaInicio: 1 });
 agendaEventSchema.index({ tipo: 1 });
+agendaEventSchema.add({
+  recordatoriosEnviados: {
+    type: [String],
+    enum: ['24H', '6H', '1H', '15M'],
+    default: [],
+  },
+});
+agendaEventSchema.index({ recordatoriosEnviados: 1 });
 
 module.exports = {
   AgendaEvent: mongoose.model('AgendaEvent', agendaEventSchema),

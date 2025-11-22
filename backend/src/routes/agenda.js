@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { AgendaEvent, tiposEventoAgenda } = require('../models/AgendaEvent');
+const { sendImmediateEventEmail } = require('../services/agendaNotificationService');
 
 const router = express.Router();
 
@@ -56,6 +57,9 @@ const mapEventResponse = (evento) => {
   const response = { ...evento };
   if (!response.expediente) {
     response.expediente = null;
+  }
+  if ('recordatoriosEnviados' in response) {
+    delete response.recordatoriosEnviados;
   }
   return response;
 };
@@ -143,6 +147,9 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    const body = { ...req.body };
+    delete body.recordatoriosEnviados;
+
     const {
       titulo,
       descripcion,
@@ -155,7 +162,7 @@ router.post('/', async (req, res) => {
       propietario,
       creadoPor,
       abogadoAsignado,
-    } = req.body;
+    } = body;
 
     if (!titulo || !fechaInicio || !propietario) {
       return res.status(400).json({ message: 'Título, fecha de inicio y propietario son obligatorios' });
@@ -199,12 +206,21 @@ router.post('/', async (req, res) => {
     });
 
     const guardado = await evento.save();
-    await guardado.populate({ path: 'expediente', select: 'titulo numeroControl abogadoAsignado fechaAudiencia' });
+    await guardado.populate([
+      { path: 'expediente', select: 'titulo numeroControl abogadoAsignado fechaAudiencia' },
+      { path: 'propietario', select: 'nombre correo usuario tipo' },
+    ]);
+
+    const responseEvent = mapEventResponse(guardado.toObject());
 
     res.status(201).json({
       message: 'Evento registrado exitosamente',
-      evento: mapEventResponse(guardado.toObject()),
+      evento: responseEvent,
     });
+
+    sendImmediateEventEmail(guardado.propietario, guardado.toObject()).catch((error) =>
+      console.error('[agendaRoutes] No se pudo enviar el correo inmediato:', error)
+    );
   } catch (error) {
     console.error('Error al crear evento de agenda:', error);
     res.status(500).json({ message: 'Error al crear el evento', error: error.message });
@@ -225,6 +241,9 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Evento no encontrado' });
     }
 
+    const datosBody = { ...req.body };
+    delete datosBody.recordatoriosEnviados;
+
     const {
       titulo,
       descripcion,
@@ -235,7 +254,7 @@ router.patch('/:id', async (req, res) => {
       ubicacion,
       expedienteId,
       abogadoAsignado,
-    } = req.body;
+    } = datosBody;
 
     const actualizaciones = {};
 

@@ -4,6 +4,7 @@ import { AgendaComponent } from './agenda.component';
 import { AgendaService } from '../../services/agenda.service';
 import { AuthService } from '../../services/auth.service';
 import { ExpedientesService } from '../../services/expedientes.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AgendaComponent', () => {
   let component: AgendaComponent;
@@ -21,6 +22,7 @@ describe('AgendaComponent', () => {
   };
 
   const authServiceMock = {
+    isAuthenticated: jasmine.createSpy('isAuthenticated').and.returnValue(true),
     getCurrentUser: jasmine.createSpy('getCurrentUser').and.returnValue({
       _id: 'user-1',
       nombre: 'Usuario Demo',
@@ -40,7 +42,7 @@ describe('AgendaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AgendaComponent],
+      imports: [AgendaComponent, RouterTestingModule],
       providers: [
         { provide: AgendaService, useValue: agendaServiceMock },
         { provide: AuthService, useValue: authServiceMock },
